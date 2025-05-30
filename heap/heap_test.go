@@ -2,10 +2,12 @@ package heap
 
 import (
 	"testing"
+
+	"github.com/Nick-Anderssohn/go-ds/heap/ordered"
 )
 
 func TestHeap(t *testing.T) {
-	h, _ := CreateHeap(HeapTypeMin, []int{69, 42, 420, -69, 1000})
+	h, _ := CreateHeap(HeapTypeMin, []ordered.Int{69, 42, 420, -69, 1000})
 
 	val := h.Pop()
 	if val != -69 {

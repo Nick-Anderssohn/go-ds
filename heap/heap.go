@@ -1,10 +1,11 @@
 package heap
 
 import (
-	"cmp"
 	stdheap "container/heap"
 	"fmt"
 	"strconv"
+
+	"github.com/Nick-Anderssohn/go-ds/heap/ordered"
 )
 
 type HeapType int8
@@ -15,17 +16,17 @@ const (
 )
 
 // heap implements the standard library's heap.Interface
-type heapWorker[T cmp.Ordered] struct {
+type heapWorker[T ordered.Type] struct {
 	heapType HeapType
 	values   []T
 }
 
-type heap[T cmp.Ordered] struct {
+type heap[T ordered.Type] struct {
 	worker heapWorker[T]
 }
 
 // Heap is a heap...duh.
-type Heap[T cmp.Ordered] interface {
+type Heap[T ordered.Type] interface {
 	Push(val T)
 	Pop() T
 }
@@ -34,7 +35,7 @@ type Heap[T cmp.Ordered] interface {
 // an error is if you pass in an invalid value for heapType. So if
 // you are directly passing in HeapTypeMin or HeapTypeMax, then it
 // is safe to ignore the error.
-func CreateHeap[T cmp.Ordered](heapType HeapType, initialValuesUnordered []T) (Heap[T], error) {
+func CreateHeap[T ordered.Type](heapType HeapType, initialValuesUnordered []T) (Heap[T], error) {
 	if heapType > HeapTypeMax {
 		return nil, fmt.Errorf("invalid value for heapType: %v", heapType)
 	}
@@ -71,9 +72,10 @@ func (h *heapWorker[T]) Less(i, j int) bool {
 
 	switch h.heapType {
 	case HeapTypeMin:
-		return iVal < jVal
+		return iVal.LessThan(jVal)
 	case HeapTypeMax:
-		return iVal > jVal
+		// The double check to handle the case where the values are equal
+		return jVal.LessThan(iVal)
 	}
 
 	// should never happen since initialization validates heapType
