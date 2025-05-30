@@ -1,6 +1,7 @@
 package heap
 
 import (
+	"cmp"
 	stdheap "container/heap"
 	"fmt"
 	"strconv"
@@ -14,17 +15,17 @@ const (
 )
 
 // heap implements the standard library's heap.Interface
-type heapWorker[T comparable] struct {
+type heapWorker[T cmp.Ordered] struct {
 	heapType HeapType
 	values   []T
 }
 
-type heap[T comparable] struct {
+type heap[T cmp.Ordered] struct {
 	worker heapWorker[T]
 }
 
 // Heap is a heap...duh.
-type Heap[T comparable] interface {
+type Heap[T cmp.Ordered] interface {
 	Push(val T)
 	Pop() T
 }
@@ -33,7 +34,7 @@ type Heap[T comparable] interface {
 // an error is if you pass in an invalid value for heapType. So if
 // you are directly passing in HeapTypeMin or HeapTypeMax, then it
 // is safe to ignore the error.
-func CreateHeap[T comparable](heapType HeapType, initialValuesUnordered []T) (Heap[T], error) {
+func CreateHeap[T cmp.Ordered](heapType HeapType, initialValuesUnordered []T) (Heap[T], error) {
 	if heapType > HeapTypeMax {
 		return nil, fmt.Errorf("invalid value for heapType: %v", heapType)
 	}
@@ -65,11 +66,14 @@ func (h *heapWorker[T]) Len() int {
 }
 
 func (h *heapWorker[T]) Less(i, j int) bool {
+	iVal := h.values[i]
+	jVal := h.values[j]
+
 	switch h.heapType {
 	case HeapTypeMin:
-		return i < j
+		return iVal < jVal
 	case HeapTypeMax:
-		return i > j
+		return iVal > jVal
 	}
 
 	// should never happen since initialization validates heapType
