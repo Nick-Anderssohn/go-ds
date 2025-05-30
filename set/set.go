@@ -1,8 +1,8 @@
 package set
 
-type Set[T any] map[any]bool
+type Set[T comparable] map[T]bool
 
-func Put[T any](s Set[T], val T) Set[T] {
+func Put[T comparable](s Set[T], val T) Set[T] {
 	if s == nil {
 		s = Set[T]{}
 	}
@@ -12,7 +12,7 @@ func Put[T any](s Set[T], val T) Set[T] {
 	return s
 }
 
-func Exists[T any](s Set[T], val T) bool {
+func Exists[T comparable](s Set[T], val T) bool {
 	if s == nil {
 		return false
 	}
@@ -21,6 +21,6 @@ func Exists[T any](s Set[T], val T) bool {
 	return exists
 }
 
-func Remove[T any](s Set[T], val T) {
+func Remove[T comparable](s Set[T], val T) {
 	delete(s, val)
 }
