@@ -27,7 +27,7 @@ func Remove[T comparable](s Set[T], val T) {
 
 func FromSlice[T comparable](slice []T) (s Set[T]) {
 	for _, val := range slice {
-		Put(s, val)
+		s = Put(s, val)
 	}
 
 	return
