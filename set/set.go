@@ -24,3 +24,11 @@ func Exists[T comparable](s Set[T], val T) bool {
 func Remove[T comparable](s Set[T], val T) {
 	delete(s, val)
 }
+
+func FromSlice[T comparable](slice []T) (s Set[T]) {
+	for _, val := range slice {
+		Put(s, val)
+	}
+
+	return
+}
