@@ -29,6 +29,7 @@ type heap[T ordered.Type] struct {
 type Heap[T ordered.Type] interface {
 	Push(val T)
 	Pop() T
+	Len() int
 }
 
 // CreateHeap creates a heap. The only case where this will return
@@ -92,4 +93,8 @@ func (h *heap[T]) Push(val T) {
 
 func (h *heap[T]) Pop() T {
 	return stdheap.Pop(&h.worker).(T)
+}
+
+func (h *heap[T]) Len() int {
+	return len(h.worker.values)
 }
